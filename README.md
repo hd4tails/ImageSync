@@ -8,3 +8,6 @@ HDAssets/ImageSync/InputTex
 
 output:
 HDAssets/ImageSync/ImageDecompress
+
+入れようとしてUnityが落ちるようになったら
+Windowsのファイルブラウザ上から入れたものを消去してそれでもだめならLibraryの中身を消す
