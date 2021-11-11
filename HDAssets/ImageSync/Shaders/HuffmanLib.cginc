@@ -389,3 +389,32 @@ int getACHuffmanSize(int huffmanValue)
 #define EOB_CATEGORY 0x0
 #define ZRL_ZERONUM  0xF
 #define ZRL_CATEGORY 0x0
+
+#define SET_OUT_BITS(value, length) {\
+    if(targetByte * 8 < nowBit + length)\
+    {\
+        if((targetByte + 1) * 8 <= nowBit + length)\
+        {\
+            int useBitLength = (targetByte + 1) * 8 - nowBit;\
+            isFinish = true;\
+            outBits = outBits << useBitLength;\
+            outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);\
+        }\
+        else\
+        {\
+            int useBitLength = (nowBit + length) - targetByte * 8;\
+            int shiftBit = useBitLength;\
+            if(length < shiftBit)\
+            {\
+                shiftBit = length;\
+            }\
+            outBits = outBits << shiftBit;\
+            outBits = outBits | (value & ((1 << useBitLength) - 1));\
+        }\
+    }\
+    nowBit += length;\
+    if(isFinish)\
+    {\
+        break;\
+    }\
+}

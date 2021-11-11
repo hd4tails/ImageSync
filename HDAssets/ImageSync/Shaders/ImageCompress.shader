@@ -230,66 +230,12 @@ Shader "HDAssets/ImageCompress/ImageCompress"
 
                                 // -------------------------------
                                 {
-                                    int value = huffmanCode;
-                                    int length = huffmanCodeSize;
-                                    if(targetByte * 8 < nowBit + length)
-                                    {
-                                        if((targetByte + 1) * 8 <= nowBit + length)
-                                        {
-                                            int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                            isFinish = true;
-                                            outBits = outBits << useBitLength;
-                                            outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                        }
-                                        else
-                                        {
-                                            int useBitLength = (nowBit + length) - targetByte * 8;
-                                            int shiftBit = useBitLength;
-                                            if(length < shiftBit)
-                                            {
-                                                shiftBit = length;
-                                            }
-                                            outBits = outBits << shiftBit;
-                                            outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                        }
-                                    }
-                                    nowBit += length;
-                                    if(isFinish)
-                                    {
-                                        break;
-                                    }
+                                    SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                 }
                                 // ------------------------------
                                 // -------------------------------
                                 {
-                                    int value = additionalBit;
-                                    int length = category;
-                                    if(targetByte * 8 < nowBit + length)
-                                    {
-                                        if((targetByte + 1) * 8 <= nowBit + length)
-                                        {
-                                            int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                            isFinish = true;
-                                            outBits = outBits << useBitLength;
-                                            outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                        }
-                                        else
-                                        {
-                                            int useBitLength = (nowBit + length) - targetByte * 8;
-                                            int shiftBit = useBitLength;
-                                            if(length < shiftBit)
-                                            {
-                                                shiftBit = length;
-                                            }
-                                            outBits = outBits << shiftBit;
-                                            outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                        }
-                                    }
-                                    nowBit += length;
-                                    if(isFinish)
-                                    {
-                                        break;
-                                    }
+                                    SET_OUT_BITS(additionalBit, category)
                                 }
                                 // ------------------------------
                                 zeroCount = 0;
@@ -313,34 +259,7 @@ Shader "HDAssets/ImageCompress/ImageCompress"
                                         int additionalBit = 0;
                                         // -------------------------------
                                         {
-                                            int value = huffmanCode;
-                                            int length = huffmanCodeSize;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                         }
                                         // ------------------------------
 
@@ -363,34 +282,7 @@ Shader "HDAssets/ImageCompress/ImageCompress"
                                         int additionalBit = 0;
                                         // -------------------------------
                                         {
-                                            int value = huffmanCode;
-                                            int length = huffmanCodeSize;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                         }
                                         // ------------------------------
 
@@ -407,66 +299,12 @@ Shader "HDAssets/ImageCompress/ImageCompress"
                                         int additionalBit = getAdditionalBit(inputValue, category);
                                         // -------------------------------
                                         {
-                                            int value = huffmanCode;
-                                            int length = huffmanCodeSize;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                         }
                                         // ------------------------------
                                         // -------------------------------
                                         {
-                                            int value = additionalBit;
-                                            int length = category;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(additionalBit, category)
                                         }
                                         // ------------------------------
 
@@ -511,66 +349,12 @@ Shader "HDAssets/ImageCompress/ImageCompress"
 
                                 // -------------------------------
                                 {
-                                    int value = huffmanCode;
-                                    int length = huffmanCodeSize;
-                                    if(targetByte * 8 < nowBit + length)
-                                    {
-                                        if((targetByte + 1) * 8 <= nowBit + length)
-                                        {
-                                            int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                            isFinish = true;
-                                            outBits = outBits << useBitLength;
-                                            outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                        }
-                                        else
-                                        {
-                                            int useBitLength = (nowBit + length) - targetByte * 8;
-                                            int shiftBit = useBitLength;
-                                            if(length < shiftBit)
-                                            {
-                                                shiftBit = length;
-                                            }
-                                            outBits = outBits << shiftBit;
-                                            outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                        }
-                                    }
-                                    nowBit += length;
-                                    if(isFinish)
-                                    {
-                                        break;
-                                    }
+                                    SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                 }
                                 // ------------------------------
                                 // -------------------------------
                                 {
-                                    int value = additionalBit;
-                                    int length = category;
-                                    if(targetByte * 8 < nowBit + length)
-                                    {
-                                        if((targetByte + 1) * 8 <= nowBit + length)
-                                        {
-                                            int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                            isFinish = true;
-                                            outBits = outBits << useBitLength;
-                                            outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                        }
-                                        else
-                                        {
-                                            int useBitLength = (nowBit + length) - targetByte * 8;
-                                            int shiftBit = useBitLength;
-                                            if(length < shiftBit)
-                                            {
-                                                shiftBit = length;
-                                            }
-                                            outBits = outBits << shiftBit;
-                                            outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                        }
-                                    }
-                                    nowBit += length;
-                                    if(isFinish)
-                                    {
-                                        break;
-                                    }
+                                    SET_OUT_BITS(additionalBit, category)
                                 }
                                 // ------------------------------
                                 zeroCount = 0;
@@ -594,34 +378,7 @@ Shader "HDAssets/ImageCompress/ImageCompress"
                                         int additionalBit = 0;
                                         // -------------------------------
                                         {
-                                            int value = huffmanCode;
-                                            int length = huffmanCodeSize;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                         }
                                         // ------------------------------
 
@@ -644,34 +401,7 @@ Shader "HDAssets/ImageCompress/ImageCompress"
                                         int additionalBit = 0;
                                         // -------------------------------
                                         {
-                                            int value = huffmanCode;
-                                            int length = huffmanCodeSize;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                         }
                                         // ------------------------------
 
@@ -688,66 +418,12 @@ Shader "HDAssets/ImageCompress/ImageCompress"
                                         int additionalBit = getAdditionalBit(inputValue, category);
                                         // -------------------------------
                                         {
-                                            int value = huffmanCode;
-                                            int length = huffmanCodeSize;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                         }
                                         // ------------------------------
                                         // -------------------------------
                                         {
-                                            int value = additionalBit;
-                                            int length = category;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(additionalBit, category)
                                         }
                                         // ------------------------------
 
@@ -818,66 +494,12 @@ Shader "HDAssets/ImageCompress/ImageCompress"
 
                                 // -------------------------------
                                 {
-                                    int value = huffmanCode;
-                                    int length = huffmanCodeSize;
-                                    if(targetByte * 8 < nowBit + length)
-                                    {
-                                        if((targetByte + 1) * 8 <= nowBit + length)
-                                        {
-                                            int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                            isFinish = true;
-                                            outBits = outBits << useBitLength;
-                                            outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                        }
-                                        else
-                                        {
-                                            int useBitLength = (nowBit + length) - targetByte * 8;
-                                            int shiftBit = useBitLength;
-                                            if(length < shiftBit)
-                                            {
-                                                shiftBit = length;
-                                            }
-                                            outBits = outBits << shiftBit;
-                                            outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                        }
-                                    }
-                                    nowBit += length;
-                                    if(isFinish)
-                                    {
-                                        break;
-                                    }
+                                    SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                 }
                                 // ------------------------------
                                 // -------------------------------
                                 {
-                                    int value = additionalBit;
-                                    int length = category;
-                                    if(targetByte * 8 < nowBit + length)
-                                    {
-                                        if((targetByte + 1) * 8 <= nowBit + length)
-                                        {
-                                            int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                            isFinish = true;
-                                            outBits = outBits << useBitLength;
-                                            outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                        }
-                                        else
-                                        {
-                                            int useBitLength = (nowBit + length) - targetByte * 8;
-                                            int shiftBit = useBitLength;
-                                            if(length < shiftBit)
-                                            {
-                                                shiftBit = length;
-                                            }
-                                            outBits = outBits << shiftBit;
-                                            outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                        }
-                                    }
-                                    nowBit += length;
-                                    if(isFinish)
-                                    {
-                                        break;
-                                    }
+                                    SET_OUT_BITS(additionalBit, category)
                                 }
                                 // ------------------------------
                                 zeroCount = 0;
@@ -901,34 +523,7 @@ Shader "HDAssets/ImageCompress/ImageCompress"
                                         int additionalBit = 0;
                                         // -------------------------------
                                         {
-                                            int value = huffmanCode;
-                                            int length = huffmanCodeSize;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                         }
                                         // ------------------------------
 
@@ -951,34 +546,7 @@ Shader "HDAssets/ImageCompress/ImageCompress"
                                         int additionalBit = 0;
                                         // -------------------------------
                                         {
-                                            int value = huffmanCode;
-                                            int length = huffmanCodeSize;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                         }
                                         // ------------------------------
 
@@ -995,66 +563,12 @@ Shader "HDAssets/ImageCompress/ImageCompress"
                                         int additionalBit = getAdditionalBit(inputValue, category);
                                         // -------------------------------
                                         {
-                                            int value = huffmanCode;
-                                            int length = huffmanCodeSize;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                         }
                                         // ------------------------------
                                         // -------------------------------
                                         {
-                                            int value = additionalBit;
-                                            int length = category;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(additionalBit, category)
                                         }
                                         // ------------------------------
 
@@ -1099,66 +613,12 @@ Shader "HDAssets/ImageCompress/ImageCompress"
 
                                 // -------------------------------
                                 {
-                                    int value = huffmanCode;
-                                    int length = huffmanCodeSize;
-                                    if(targetByte * 8 < nowBit + length)
-                                    {
-                                        if((targetByte + 1) * 8 <= nowBit + length)
-                                        {
-                                            int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                            isFinish = true;
-                                            outBits = outBits << useBitLength;
-                                            outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                        }
-                                        else
-                                        {
-                                            int useBitLength = (nowBit + length) - targetByte * 8;
-                                            int shiftBit = useBitLength;
-                                            if(length < shiftBit)
-                                            {
-                                                shiftBit = length;
-                                            }
-                                            outBits = outBits << shiftBit;
-                                            outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                        }
-                                    }
-                                    nowBit += length;
-                                    if(isFinish)
-                                    {
-                                        break;
-                                    }
+                                    SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                 }
                                 // ------------------------------
                                 // -------------------------------
                                 {
-                                    int value = additionalBit;
-                                    int length = category;
-                                    if(targetByte * 8 < nowBit + length)
-                                    {
-                                        if((targetByte + 1) * 8 <= nowBit + length)
-                                        {
-                                            int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                            isFinish = true;
-                                            outBits = outBits << useBitLength;
-                                            outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                        }
-                                        else
-                                        {
-                                            int useBitLength = (nowBit + length) - targetByte * 8;
-                                            int shiftBit = useBitLength;
-                                            if(length < shiftBit)
-                                            {
-                                                shiftBit = length;
-                                            }
-                                            outBits = outBits << shiftBit;
-                                            outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                        }
-                                    }
-                                    nowBit += length;
-                                    if(isFinish)
-                                    {
-                                        break;
-                                    }
+                                    SET_OUT_BITS(additionalBit, category)
                                 }
                                 // ------------------------------
                                 zeroCount = 0;
@@ -1182,34 +642,7 @@ Shader "HDAssets/ImageCompress/ImageCompress"
                                         int additionalBit = 0;
                                         // -------------------------------
                                         {
-                                            int value = huffmanCode;
-                                            int length = huffmanCodeSize;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                         }
                                         // ------------------------------
 
@@ -1232,34 +665,7 @@ Shader "HDAssets/ImageCompress/ImageCompress"
                                         int additionalBit = 0;
                                         // -------------------------------
                                         {
-                                            int value = huffmanCode;
-                                            int length = huffmanCodeSize;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                         }
                                         // ------------------------------
 
@@ -1276,66 +682,12 @@ Shader "HDAssets/ImageCompress/ImageCompress"
                                         int additionalBit = getAdditionalBit(inputValue, category);
                                         // -------------------------------
                                         {
-                                            int value = huffmanCode;
-                                            int length = huffmanCodeSize;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(huffmanCode, huffmanCodeSize)
                                         }
                                         // ------------------------------
                                         // -------------------------------
                                         {
-                                            int value = additionalBit;
-                                            int length = category;
-                                            if(targetByte * 8 < nowBit + length)
-                                            {
-                                                if((targetByte + 1) * 8 <= nowBit + length)
-                                                {
-                                                    int useBitLength = (targetByte + 1) * 8 - nowBit;
-                                                    isFinish = true;
-                                                    outBits = outBits << useBitLength;
-                                                    outBits = outBits | ((value >> (length - useBitLength)) & 0xFF);
-                                                }
-                                                else
-                                                {
-                                                    int useBitLength = (nowBit + length) - targetByte * 8;
-                                                    int shiftBit = useBitLength;
-                                                    if(length < shiftBit)
-                                                    {
-                                                        shiftBit = length;
-                                                    }
-                                                    outBits = outBits << shiftBit;
-                                                    outBits = outBits | (value & ((1 << useBitLength) - 1));
-                                                }
-                                            }
-                                            nowBit += length;
-                                            if(isFinish)
-                                            {
-                                                break;
-                                            }
+                                            SET_OUT_BITS(additionalBit, category)
                                         }
                                         // ------------------------------
 
