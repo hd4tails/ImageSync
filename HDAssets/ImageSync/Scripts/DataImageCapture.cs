@@ -157,7 +157,10 @@ namespace HDAssets.ImageSync
                 return;
             }
             Debug.Log("SendByteSize:" + result.byteCount + "byte");
-            sendSizeText.text = "SendByteSize:" + result.byteCount + "byte";
+            if(sendSizeText != null)
+            {
+                sendSizeText.text = "SendByteSize:" + result.byteCount + "byte";
+            }
 
 
             OnDeserialization();
