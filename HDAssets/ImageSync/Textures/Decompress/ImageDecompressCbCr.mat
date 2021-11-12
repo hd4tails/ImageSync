@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: C_ImageDecompress
+  m_Name: ImageDecompressCbCr
   m_Shader: {fileID: 4800000, guid: f73cdb69d0ecac74880aca49aa8b47c5, type: 3}
   m_ShaderKeywords: _ISC_ON
   m_LightmapFlags: 4
@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 4ce9df8db51decb44a5c44a30fe0395c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3fa9495ed5f052e46935d19cad19b7b6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:

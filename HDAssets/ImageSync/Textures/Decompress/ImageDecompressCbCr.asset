@@ -6,7 +6,7 @@ CustomRenderTexture:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: C_ImageCompress
+  m_Name: ImageDecompressCbCr
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -35,7 +35,7 @@ CustomRenderTexture:
     m_WrapW: 1
   m_Dimension: 2
   m_VolumeDepth: 1
-  m_Material: {fileID: 2100000, guid: bda30812b4b311a4fb9a1215d22f7fd9, type: 2}
+  m_Material: {fileID: 2100000, guid: b4449e1bee2da0749a1383f4eb54a798, type: 2}
   m_InitSource: 0
   m_InitMaterial: {fileID: 0}
   m_InitColor: {r: 0, g: 0, b: 0, a: 1}
@@ -63,7 +63,7 @@ CustomRenderTexture:
   - updateZoneCenter: {x: 0.5, y: 0.5, z: 0.5}
     updateZoneSize: {x: 1, y: 1, z: 1}
     rotation: 0
-    passIndex: 4
+    passIndex: 5
     needSwap: 1
   - updateZoneCenter: {x: 0.5, y: 0.5, z: 0.5}
     updateZoneSize: {x: 1, y: 1, z: 1}
@@ -79,11 +79,6 @@ CustomRenderTexture:
     updateZoneSize: {x: 1, y: 1, z: 1}
     rotation: 0
     passIndex: 8
-    needSwap: 1
-  - updateZoneCenter: {x: 0.5, y: 0.5, z: 0.5}
-    updateZoneSize: {x: 1, y: 1, z: 1}
-    rotation: 0
-    passIndex: 9
     needSwap: 1
   - updateZoneCenter: {x: 0.5, y: 0.5, z: 0.5}
     updateZoneSize: {x: 1, y: 1, z: 1}

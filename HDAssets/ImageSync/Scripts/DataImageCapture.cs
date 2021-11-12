@@ -11,25 +11,59 @@ namespace HDAssets.ImageSync
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class DataImageCapture : UdonSharpBehaviour
     {
-        [SerializeField] private Texture2D targetTexYA;
-        [SerializeField] private Texture2D targetTexC;
-        [SerializeField] private CustomRenderTexture crtYAImageCompress;
-        [SerializeField] private CustomRenderTexture crtCImageCompress;
-        [SerializeField] private CustomRenderTexture crtYAImageDecompress;
-        [SerializeField] private CustomRenderTexture crtCImageDecompress;
-        [SerializeField] private CustomRenderTexture crtImageDecompress;
-        [SerializeField] private Texture2D yaDataOutTex;
-        [SerializeField] private Texture2D cDataOutTex;
-        private Camera cam;
+        #region Inspector
+        [HeaderAttribute("=================送信元で更新するか=================")]
+        [SerializeField] private bool isUpdateSend = true;
+        [HeaderAttribute("=================入力/出力画像=================")]
+        [HeaderAttribute("512px角-RGBA32の入力画像")]
+        [SerializeField] private Texture inputImage;
+        [HeaderAttribute("512px角-RGBA32の出力画像(CustomRenderTexture)")]
+        [SerializeField] private CustomRenderTexture outputImage;
 
-        [UdonSynced(UdonSyncMode.None)] private Color32[] yaSyncValues = new Color32[0];
+        [HeaderAttribute("=================その他=================")]
+        [HeaderAttribute("送信サイズ表示用のTMP")]
+        [SerializeField] private TextMeshPro sentSizeText;
 
-        [UdonSynced(UdonSyncMode.None)] private Color32[] cSyncValues = new Color32[0];
-        [SerializeField] [UdonSynced(UdonSyncMode.None)] private short syncIndex = -255;
+        [HeaderAttribute("=================送信/受信=================")]
+        [HeaderAttribute("Udonで操作するため、圧縮済みの画像(Y/A)を一時的に格納するテクスチャ")]
+        [SerializeField] private Texture2D temporaryImageYA;
+        [HeaderAttribute("Udonで操作するため、圧縮済みの画像(CbCr)を一時的に格納するテクスチャ")]
+        [SerializeField] private Texture2D temporaryImageCbCr;
 
-        [SerializeField] private short beforeSyncIndex = -255;
-        [SerializeField] private TextMeshPro sendSizeText;
+        [HeaderAttribute("=================圧縮/展開=================")]
+        [HeaderAttribute("画像の圧縮処理を行うCustomRenderTexture(Y/A)")]
+        [SerializeField] private CustomRenderTexture imageCompressCRTYA;
+        [HeaderAttribute("画像の圧縮処理を行うCustomRenderTexture(CbCr)")]
+        [SerializeField] private CustomRenderTexture imageCompressCRTCbCr;
+        [HeaderAttribute("画像の展開処理を行うCustomRenderTexture(Y/A)")]
+        [SerializeField] private CustomRenderTexture imageDecompressCRTYA;
+        [HeaderAttribute("画像の展開処理を行うCustomRenderTexture(CbCr)")]
+        [SerializeField] private CustomRenderTexture imageDecompressCRTCbCr;
+        #endregion
+        // Inspector
 
+        #region Sync
+        // 同期するデータ(Y/A)
+        [UdonSynced(UdonSyncMode.None)] private Color32[] syncValuesYA = new Color32[0];
+        // 同期するデータ(CbCr)
+        [UdonSynced(UdonSyncMode.None)] private Color32[] syncValuesCbCr = new Color32[0];
+        // 同期されたデータの番号
+        [UdonSynced(UdonSyncMode.None)] private short syncIndex = -255;
+        #endregion
+        // Sync
+
+        #region Valiable
+        // Udonで操作するため、圧縮済みの画像を取り込むカメラ
+        private Camera dataCaptureCamera;
+        // 1つ前に同期されたデータの番号
+        private short beforeSyncIndex = -255;
+        #endregion
+        // Valiable
+
+        /*
+         * オーナーを取得する
+         * 送信前にオーナーを取得しておくこと
+         */
         public void RequestOwner()
         {
             if(!Networking.IsOwner(Networking.LocalPlayer, gameObject))
@@ -37,53 +71,73 @@ namespace HDAssets.ImageSync
                 Networking.SetOwner(Networking.LocalPlayer, gameObject);
             }
         }
+        /*
+         * 送信を要求する
+         */
+        public void RequestSend()
+        {
+            #if UNITY_EDITOR
+            // オーナーで無い時は処理を止める
+            if(!Networking.IsOwner(Networking.LocalPlayer, gameObject))
+            {
+                return;
+            }
+            #endif
+            // 圧縮を行う
+            imageCompressCRTYA.Update(1);
+            imageCompressCRTCbCr.Update(1);
+            
+            // 1F待ってからデータ読み込み用のカメラをOnにする
+            SendCustomEventDelayedFrames("_StartDataCapture", 1);
+        }
+
         void Start()
         {
-            cam = GetComponent<Camera>();
-            cam.enabled = false;
+            dataCaptureCamera = GetComponent<Camera>();
+            dataCaptureCamera.enabled = false;
+
+            // 圧縮の入力に指定された画像を設定する
+            imageCompressCRTYA.material.SetTexture("_MainTex", inputImage);
+            imageCompressCRTCbCr.material.SetTexture("_MainTex", inputImage);
         }
 
         void OnPostRender()
         {
-            // YA
-            // C
-            // のかたちで縦に並んでいる
-            // 左上が原点
+            // 左上が原点でY/A-CbCrの順で並べている
             Rect rectYA = new Rect(
                 0,
                 0,
-                cam.pixelRect.width,
-                Mathf.RoundToInt(cam.pixelRect.height / 2)
+                dataCaptureCamera.pixelRect.width,
+                Mathf.RoundToInt(dataCaptureCamera.pixelRect.height / 2)
             );
             Rect rectC = new Rect(
                 0,
-                Mathf.RoundToInt(cam.pixelRect.height / 2),
-                Mathf.RoundToInt(cam.pixelRect.width  / 2),
-                Mathf.RoundToInt(cam.pixelRect.height / 4)
+                Mathf.RoundToInt(dataCaptureCamera.pixelRect.height / 2),
+                Mathf.RoundToInt(dataCaptureCamera.pixelRect.width  / 2),
+                Mathf.RoundToInt(dataCaptureCamera.pixelRect.height / 4)
             );
-            targetTexYA.ReadPixels(rectYA, 0, 0, false);
-            targetTexYA.Apply(false);
-            targetTexC.ReadPixels(rectC, 0, 0, false);
-            targetTexC.Apply(false);
-            cam.enabled = false;
-            StartSend();
-        }
-        public void RequestCapture()
-        {
-            crtYAImageCompress.Update(1);
-            crtCImageCompress.Update(1);
+            // 読み込んだデータをtemporaryの画像に書き込む
+            temporaryImageYA.ReadPixels(rectYA, 0, 0, false);
+            temporaryImageYA.Apply(false);
+            temporaryImageCbCr.ReadPixels(rectC, 0, 0, false);
+            temporaryImageCbCr.Apply(false);
+            // データ読み込み用のカメラを止める
+            dataCaptureCamera.enabled = false;
 
-            SendCustomEventDelayedFrames("SendCrtUpdate", 1);
+            // 送信開始
+            DoSync();
         }
-        private void StartSend()
+        private void DoSync()
         {
+            // データの番号を更新
             syncIndex--;
             if(syncIndex < 0)
             {
                 syncIndex = 2047;
             }
-            Color32[] yaData = targetTexYA.GetPixels32();
-            Color32[] cData = targetTexC.GetPixels32();
+
+            Color32[] yaData = temporaryImageYA.GetPixels32();
+            Color32[] cData = temporaryImageCbCr.GetPixels32();
             
             int yaDataSize = yaData[0].r
                              + yaData[0].g * 0x100
@@ -100,54 +154,59 @@ namespace HDAssets.ImageSync
                 Debug.Log("SendDataSizeError");
                 return;
             }
-            yaSyncValues = new Color32[yaDataSize + 1]; // size格納Pixel分を追加
-            cSyncValues = new Color32[cDataSize + 1]; // size格納Pixel分を追加
-            Array.Copy(yaData, yaSyncValues, yaSyncValues.Length);
-            Array.Copy(cData, cSyncValues, cSyncValues.Length);
+            syncValuesYA = new Color32[yaDataSize + 1]; // size格納Pixel分を追加
+            syncValuesCbCr = new Color32[cDataSize + 1]; // size格納Pixel分を追加
+            Array.Copy(yaData, syncValuesYA, syncValuesYA.Length);
+            Array.Copy(cData, syncValuesCbCr, syncValuesCbCr.Length);
             
             RequestSerialization();
             #if UNITY_EDITOR
-            OnDeserialization();
+            if(isUpdateSend)
+            {
+                // エディタ上ではSerializationが呼ばれないため、明示的に呼ぶ
+                // 送信側も更新する場合はOnDeserializationを呼ぶ
+                OnDeserialization();
+            }
             #endif
         }
-        public void SendCrtUpdate()
+        public void _StartDataCapture()
         {
-            cam.enabled = true;
+            // データ読み込み用のカメラをつける
+            dataCaptureCamera.enabled = true;
         }
-
-        private void StartGet()
-        {
-            Color32[] yaOutData = yaDataOutTex.GetPixels32();
-            Color32[] cOutData = cDataOutTex.GetPixels32();
-            Array.Clear(yaOutData, 0, yaOutData.Length);
-            Array.Clear(cOutData, 0, cOutData.Length);
-            
-            Array.Copy(yaSyncValues, yaOutData, yaSyncValues.Length);
-            Array.Copy(cSyncValues, cOutData, cSyncValues.Length);
-
-            yaDataOutTex.SetPixels32(yaOutData, 0);
-            yaDataOutTex.Apply(false);
-            cDataOutTex.SetPixels32(cOutData, 0);
-            cDataOutTex.Apply(false);
-            crtYAImageDecompress.Update(1);
-            crtCImageDecompress.Update(1);
-
-            SendCustomEventDelayedFrames("ResCrtUpdate", 100);
-        }
-        public void ResCrtUpdate()
-        {
-            crtImageDecompress.Update(2);
-        }
-
         override public void OnDeserialization()
         {
             // 値が更新されている.
             if(beforeSyncIndex != syncIndex)
             {
-                StartGet();
+                DoReceive();
+                beforeSyncIndex = syncIndex;
             }
-            beforeSyncIndex = syncIndex;
         }
+
+        private void DoReceive()
+        {
+            Color32[] yaOutData = temporaryImageYA.GetPixels32();
+            Color32[] cOutData = temporaryImageCbCr.GetPixels32();
+            Array.Clear(yaOutData, 0, yaOutData.Length);
+            Array.Clear(cOutData, 0, cOutData.Length);
+            
+            Array.Copy(syncValuesYA, yaOutData, syncValuesYA.Length);
+            Array.Copy(syncValuesCbCr, cOutData, syncValuesCbCr.Length);
+
+            temporaryImageYA.SetPixels32(yaOutData, 0);
+            temporaryImageYA.Apply(false);
+            temporaryImageCbCr.SetPixels32(cOutData, 0);
+            temporaryImageCbCr.Apply(false);
+            DoDecompress();
+        }
+        public void DoDecompress()
+        {
+            imageDecompressCRTYA.Update(1);
+            imageDecompressCRTCbCr.Update(1);
+            outputImage.Update(2);
+        }
+
 
         override public void OnPostSerialization(VRC.Udon.Common.SerializationResult result)
         {
@@ -157,13 +216,20 @@ namespace HDAssets.ImageSync
                 return;
             }
             Debug.Log("SendByteSize:" + result.byteCount + "byte");
-            if(sendSizeText != null)
+            if(sentSizeText != null)
             {
-                sendSizeText.text = "SendByteSize:" + result.byteCount + "byte";
+                sentSizeText.text = "SendByteSize:" + result.byteCount + "byte";
             }
 
-
-            OnDeserialization();
+            if(isUpdateSend)
+            {
+                // 送信側も更新する場合はOnDeserializationを呼ぶ
+                OnDeserialization();
+            }
+            else
+            {
+                beforeSyncIndex = syncIndex;
+            }
         }
     }
 }

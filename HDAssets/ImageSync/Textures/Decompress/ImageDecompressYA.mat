@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: C_ImageCompress
-  m_Shader: {fileID: 4800000, guid: e2999693d175e1e4ebbae2a5743fea28, type: 3}
-  m_ShaderKeywords: _ISC_ON
+  m_Name: ImageDecompressYA
+  m_Shader: {fileID: 4800000, guid: f73cdb69d0ecac74880aca49aa8b47c5, type: 3}
+  m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -40,7 +40,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 8400000, guid: 4e150537a1741a24581e7a5e34126179, type: 2}
+        m_Texture: {fileID: 2800000, guid: 6a730d60bfec52647b62d7e27eba83dc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTexC:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -77,7 +81,7 @@ Material:
     - _UVSec: 0
     - _UpdateFrag: 1
     - _ZWrite: 1
-    - _isC: 1
+    - _isC: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
