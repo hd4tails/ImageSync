@@ -162,12 +162,14 @@ namespace HDAssets.ImageSync
             RequestSerialization();
             #if UNITY_EDITOR
             if(isUpdateSend)
+            #else
+            if(VRCPlayerApi.GetPlayerCount() == 1)
+            #endif
             {
                 // エディタ上ではSerializationが呼ばれないため、明示的に呼ぶ
                 // 送信側も更新する場合はOnDeserializationを呼ぶ
                 OnDeserialization();
             }
-            #endif
         }
         public void _StartDataCapture()
         {

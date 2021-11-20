@@ -1,10 +1,9 @@
-﻿Shader "HDAssets/ImageCompress/PostInDCT"
+﻿Shader "HDAssets/ImageCompress/CombineDecompress"
 {
     Properties
     {
         _TexYA("TargetImageYA", 2D) = "white" {}
         _TexC("TargetImageC", 2D) = "white" {}
-        [Toggle]_UpdateFrag("Update", Int) = 0
     }
 
     SubShader

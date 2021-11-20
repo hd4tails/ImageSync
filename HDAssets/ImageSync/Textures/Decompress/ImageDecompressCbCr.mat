@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: ImageDecompressCbCr
   m_Shader: {fileID: 4800000, guid: f73cdb69d0ecac74880aca49aa8b47c5, type: 3}
-  m_ShaderKeywords: _ISC_ON
+  m_ShaderKeywords: _ISC_ON _TARGET_TYPE_CRCB
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -74,6 +74,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _TARGET_TYPE: 1
     - _UVSec: 0
     - _UpdateFrag: 1
     - _ZWrite: 1
