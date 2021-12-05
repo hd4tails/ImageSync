@@ -72,7 +72,7 @@ Shader "HDAssets/ImageCompress/ImageDecompress"
                      + round(xSizeSep.z * 255) * 0x10000
                      + round(xSizeSep.w * 255) * 0x1000000;
                 uint ySize = 
-                    round(ySizeSep.x)
+                    round(ySizeSep.x * 255)
                      + round(ySizeSep.y * 255) * 0x100
                      + round(ySizeSep.z * 255) * 0x10000
                      + round(ySizeSep.w * 255) * 0x1000000;
@@ -86,12 +86,13 @@ Shader "HDAssets/ImageCompress/ImageDecompress"
                 }
                 else
                 {
+                    uint dataIndex = index - 1;
                     // x
-                    if(index - 1 < ceil(xSize / 4.0) * 4)
+                    if(dataIndex < xSize)
                     {
                         // このPixelで扱うデータの位置の原点
-                        uint setIndex = (index - 1) / 4;
-                        switch((index - 1) - setIndex * 4)
+                        uint setIndex = ceil(dataIndex / 4);
+                        switch(dataIndex - setIndex * 4)
                         {
                             case 0:
                                 result.x = tex2D(_SelfTexture2D, pixel2uv(index2pixel(setIndex + 2, formatedSize().x))).x;
@@ -108,11 +109,12 @@ Shader "HDAssets/ImageCompress/ImageDecompress"
                         }
                     }
                     // y
-                    if(index - 1 - ceil(xSize / 4.0) * 4 < ceil(ySize / 4.0) * 4)
+                    if(dataIndex < ySize)
                     {
                         // このPixelで扱うデータの位置の原点
-                        uint setIndex = (index - 1) / 4 + ceil(xSize / 4.0);
-                        switch((index - 1) - (setIndex - ceil(xSize / 4.0)) * 4)
+                        uint lastXIndex = ceil(xSize / 4.0 + 1) - 1; // xSizeが所属する最後のIndex
+                        uint setIndex = ceil(dataIndex / 4) + lastXIndex;
+                        switch(dataIndex - (setIndex - lastXIndex) * 4)
                         {
                             case 0:
                                 result.y = tex2D(_SelfTexture2D, pixel2uv(index2pixel(setIndex + 2, formatedSize().x))).x;
